@@ -7,7 +7,17 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "AuthenticationServer", "Aut
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "MenuItemService", "MenuItemService\MenuItemService.csproj", "{6188ED7D-689C-4274-87EE-E85C536EF5C5}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "BranchServices", "BranchServices\BranchServices.csproj", "{AC5F89FF-2CEA-424C-A2CF-D7981D59E160}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "BranchServices", "BranchServices\BranchServices.csproj", "{AC5F89FF-2CEA-424C-A2CF-D7981D59E160}"
+EndProject
+Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Solution Items", "Solution Items", "{285529BF-B385-41D8-9A02-7A1E1287164C}"
+	ProjectSection(SolutionItems) = preProject
+		.dockerignore = .dockerignore
+		.gitattributes = .gitattributes
+		.gitignore = .gitignore
+		HaloHopPot.sql = HaloHopPot.sql
+		LICENSE.txt = LICENSE.txt
+		README.md = README.md
+	EndProjectSection
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution
