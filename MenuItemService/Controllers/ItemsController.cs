@@ -9,6 +9,7 @@ using MenuItemService.Data;
 using MenuItemService.Models;
 using MenuItemService.Dtos;
 using System.ComponentModel.DataAnnotations;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MenuItemService.Controllers
 {
@@ -25,6 +26,7 @@ namespace MenuItemService.Controllers
 
         // GET: api/Items
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<Item>>> GetItems()
         {
             var items = await _context.Items
@@ -67,7 +69,7 @@ namespace MenuItemService.Controllers
             return item;
         }
         [HttpPut("status/{id}")]
-        public async Task<ActionResult<Item>> GetItemStatus(int id, [Required] string status)
+        public async Task<ActionResult<Item>> PutItemStatus(int id, [Required] string status)
         {
             var item = await _context.Items.FindAsync(id);
 
@@ -131,7 +133,7 @@ namespace MenuItemService.Controllers
                 ItemDescription = itemRequest.ItemDescription,
                 OriginalPrice = itemRequest.OriginalPrice,
                 CategoryId = itemRequest.CategoryId,
-                IsCharged = itemRequest.IsCharged,
+                IsCharged = (bool)itemRequest.IsCharged,
                 Images = new List<Image>()
             };
             _context.Items.Add(insertedItem);

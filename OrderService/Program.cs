@@ -1,4 +1,4 @@
-using MenuItemService.Data;
+using BranchService.Data;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.FileProviders;

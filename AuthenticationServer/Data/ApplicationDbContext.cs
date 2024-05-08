@@ -49,5 +49,6 @@ namespace AuthenticationServer.Data
             };
             builder.Entity<IdentityRole>().HasData(roles);
         }
+        public DbSet<WorkShift> WorkShifts { get; set; }
     }
 }

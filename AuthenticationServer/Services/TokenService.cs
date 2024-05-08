@@ -23,16 +23,17 @@ namespace AuthenticationServer.Services
 
         public string createToken(AppUser user, IList<string>? roles)
         {
-            var claims = new List<Claim>
+            var claims = new List<Claim>();
+            if (user != null)
             {
-                new Claim(JwtRegisteredClaimNames.Email, user.Email),
-                new Claim(JwtRegisteredClaimNames.GivenName, user.UserName),
-            };
+                claims.Add(new Claim(JwtRegisteredClaimNames.Email, user.Email ?? throw new Exception("Invalid")));
+                claims.Add(new Claim(JwtRegisteredClaimNames.GivenName, user.UserName ?? ""));
+            }
 
 
-            var additionalClaims = new Dictionary<string, object>();
+            var additionalClaims = new Dictionary<string,object>();
 
-            additionalClaims.Add("roles",roles);
+            additionalClaims.Add(ClaimTypes.Role, roles);
 
 
 

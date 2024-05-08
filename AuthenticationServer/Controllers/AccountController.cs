@@ -29,7 +29,7 @@ namespace AuthenticationServer.Controllers
 
             var user = await _userManager.Users.FirstOrDefaultAsync(x => x.UserName == loginDto.Username.ToLower());
 
-            if (user == null) return Unauthorized("Invalid username!");
+            if (user == null) return Unauthorized(new {message = "Invalid Username"});
 
             var result = await _signInManager.CheckPasswordSignInAsync(user, loginDto.Password, false);
 
@@ -42,9 +42,12 @@ namespace AuthenticationServer.Controllers
             return Ok(
                 new NewUserDto
                 {
+                    Id = user.Id,
+                    FullName = user.FullName,
                     UserName = user.UserName,
                     Email = user.Email,
-                    AccessToken = _tokenService.createToken(user,userRoles)
+                    AccessToken = _tokenService.createToken(user,userRoles),
+                    Roles = userRoles
                 }
             );
         }
@@ -66,24 +69,13 @@ namespace AuthenticationServer.Controllers
 
                 if (createUser.Succeeded)
                 {
-                    var roleResult = await _userManager.AddToRoleAsync(appUser, "Administrator");
-                    if (roleResult.Succeeded)
-                    {
                         var userRoles = await _userManager.GetRolesAsync(appUser);
-
                         return Ok(new NewUserDto
                         {
                             Email = appUser.Email,
                             UserName = appUser.UserName,
                             AccessToken = _tokenService.createToken(appUser, userRoles),
                         });
-                    }
-                    else
-                    {
-                        await _userManager.DeleteAsync(appUser);
-                        return StatusCode(500, roleResult.Errors.ToList());
-                    }
-
                 }
                 else
                 {

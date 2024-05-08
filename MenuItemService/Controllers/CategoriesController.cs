@@ -8,11 +8,13 @@ using Microsoft.EntityFrameworkCore;
 using MenuItemService.Data;
 using MenuItemService.Models;
 using MenuItemService.Dtos;
+using Microsoft.AspNetCore.Authorization;
 
 namespace MenuItemService.Controllers
 {
     [Route("api/[controller]")]
     [ApiController]
+/*    [Authorize(Roles ="Administrator")]*/
     public class CategoriesController : ControllerBase
     {
         private readonly ApplicationDbContext _context;
@@ -24,10 +26,11 @@ namespace MenuItemService.Controllers
 
         // GET: api/Categories
         [HttpGet]
+        [AllowAnonymous]
         public async Task<ActionResult<IEnumerable<CategoryDto>>> GetCategories()
         {
             var categories = await _context.Categories
-                .Select(category => new CategoryDto
+                .Select(category => new 
                 {
                     CategoryId = category.CategoryId,
                     CategoryName = category.CategoryName,
@@ -64,12 +67,24 @@ namespace MenuItemService.Controllers
 
         // PUT: api/Categories/5
         // To protect from overposting attacks, see https://go.microsoft.com/fwlink/?linkid=2123754
-        [HttpPut("{id}")]
-        public async Task<IActionResult> PutCategory(int id, Category category)
+        public class CategoryEditModel
         {
-            if (id != category.CategoryId)
+            public int CategoryId { get; set; }
+            public string ? CategoryName { get; set; }
+        }
+        [HttpPut("{id}")]
+        public async Task<IActionResult> PutCategory(int id,[FromBody] CategoryEditModel categoryEditModel)
+        {
+            if (id != categoryEditModel.CategoryId)
             {
                 return BadRequest();
+            }
+
+            var category = await _context.Categories.FirstOrDefaultAsync(_context => _context.CategoryId == id);
+            category.CategoryName = categoryEditModel.CategoryName;
+            if (category == null)
+            {
+                return NotFound("Category Not Founded");
             }
 
             _context.Entry(category).State = EntityState.Modified;
@@ -90,7 +105,7 @@ namespace MenuItemService.Controllers
                 }
             }
 
-            return NoContent();
+            return Ok($"Category {category.CategoryId} Name's Updated to {category.CategoryName}");
         }
 
         // POST: api/Categories
@@ -110,6 +125,7 @@ namespace MenuItemService.Controllers
 
         // DELETE: api/Categories/5
         [HttpDelete("{id}")]
+        [AllowAnonymous]
         public async Task<IActionResult> DeleteCategory(int id)
         {
             var category = await _context.Categories.FindAsync(id);

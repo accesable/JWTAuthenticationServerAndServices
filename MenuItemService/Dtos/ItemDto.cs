@@ -1,4 +1,6 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel;
+using System.ComponentModel.DataAnnotations;
+using System.Diagnostics.CodeAnalysis;
 
 namespace MenuItemService.Dtos
 {
@@ -19,8 +21,8 @@ namespace MenuItemService.Dtos
         public decimal OriginalPrice { get; set; }
         /*        public ICollection<ImageRequest>? Images { get; set; }*/
         public int CategoryId { get; set; }
-
-        [Required]
-        public bool IsCharged { get; set; }
+        [DefaultValue(false)]
+        [AllowNull]
+        public bool ? IsCharged { get; set; } = false;
     }
 }

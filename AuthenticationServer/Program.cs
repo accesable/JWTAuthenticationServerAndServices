@@ -29,6 +29,13 @@ var mailSettings = builder.Configuration.GetSection("MailSettings");
 builder.Services.Configure<MailSettings>(mailSettings);
 builder.Services.AddTransient<IEmailSender, SendMailService>();
 builder.Services.AddScoped<ITokenService, TokenService>();
+builder.Services.AddCors(options =>
+{
+    options.AddPolicy("AllowSpecificOrigin",
+        builder => builder.WithOrigins("http://localhost:3000", "http://localhost:5173")
+                          .AllowAnyMethod()
+                          .AllowAnyHeader());
+});
 
 
 /*builder.Services.AddIdentityApiEndpoints<AppUser>().AddEntityFrameworkStores<ApplicationDbContext>();*/
@@ -112,6 +119,7 @@ if (app.Environment.IsDevelopment())
 }
 
 app.UseHttpsRedirection();
+app.UseCors("AllowSpecificOrigin");
 
 app.UseAuthentication();
 app.UseAuthorization();
